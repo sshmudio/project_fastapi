@@ -1,29 +1,14 @@
-from datetime import date, datetime
-from pydantic import BaseModel
-
-
-class UserCreate(BaseModel):
-    username: str
-    email: str
-    password: str
-
-
-class UserUpdate(BaseModel):
-    id: int
-    username: str
-    email: str
-    password: str
-
-
-class UserSelect(BaseModel):
-    username: str
-    email: str
-    password: str
+from pydantic import BaseModel, Field
 
 
 class UserSchema(BaseModel):
+    username: str = Field(..., min_length=3, max_length=50)
+    email: str = Field(..., min_length=3, max_length=50)
+    password: str = Field(..., min_length=3, max_length=256)
+
+
+class UserDb(UserSchema):
     id: int
-    username: str
-    email: str
-    password: str
-    register_date: str
+
+    class Config:
+        orm_mode = True

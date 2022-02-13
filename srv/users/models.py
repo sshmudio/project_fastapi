@@ -1,12 +1,19 @@
-import sqlalchemy
-from datetime import datetime
-from srv.users.db import metadata, engine
+from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy.sql import func
+from srv.users.db import Base
 
-users = sqlalchemy.Table("users", metadata,
-                         sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True, index=True),
-                         sqlalchemy.Column("username", sqlalchemy.String, index=True),
-                         sqlalchemy.Column("email", sqlalchemy.String, index=True),
-                         sqlalchemy.Column("password", sqlalchemy.String),
-                         sqlalchemy.Column("register_date", sqlalchemy.String, default=datetime.now()))
 
-metadata.create_all(bind=engine)
+class User(Base):
+
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True)
+    username = Column(String(50))
+    email = Column(String(50))
+    password = Column(String(256))
+    created_date = Column(DateTime, default=func.now(), nullable=False)
+
+    def __init__(self, username, email, password):
+        self.username = username
+        self.email = email
+        self.password = password
